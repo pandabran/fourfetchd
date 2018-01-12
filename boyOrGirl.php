@@ -33,7 +33,7 @@ body{
 			<center><img id="bog-btn" src="img/boy_or_girl.png"></center>
 		</div>
 		<div class="row labels">
-			<center><img id="boy-label" src="img/boy-deselected.png"><img id="girl-label" src="img/girl-deselected.png"></center>
+			<center><img id="boy-label" src="img/boy-deselected.png"><img id="girl-label" src="img/girl-deselected.png"><img id="blankspace" src="img/label-blank.png" hidden></center>
 		</div>
 		<div class="row sprites">
 			<center><img id="boy-sprite" src="img/boy_sprite-deselected.png"><img id="girl-sprite" src="img/girl_sprite-deselected.png"></center>
@@ -48,17 +48,17 @@ body{
 <script src="js/jquery-3.1.1.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script>
-var isLoginSelected = true; // true = login; false = register
-var song = document.createElement("audio");
-song.setAttribute("src", "audio/sfx/select.mp3");
+var isSpriteSelected = false;
+var select = document.createElement("audio");
+select.setAttribute("src", "audio/sfx/select.mp3");
 $.get();
 
 function playSound(){
-	if(song.currentTime != 0){
-		song.pause();
-		song.currentTime = 0;
+	if(select.currentTime != 0){
+		select.pause();
+		select.currentTime = 0;
 	}		
-	song.play();
+	select.play();
 }
 
 function selectOption(link){
@@ -69,14 +69,18 @@ function selectOption(link){
 }
 
 function selectBoy(){
-	$("#boy-sprite").attr("src", "img/boy_sprite.png");
-	$("#boy-label").attr("src", "img/boy-selected.png");
-	playSound();
+	if(!isSpriteSelected){
+		$("#boy-sprite").attr("src", "img/boy_sprite.png");
+		$("#boy-label").attr("src", "img/boy-selected.png");
+		playSound();
+	}
 }
 
 function deselectBoy(){
-	$("#boy-sprite").attr("src", "img/boy_sprite-deselected.png");
-	$("#boy-label").attr("src", "img/boy-deselected.png");
+	if(!isSpriteSelected){
+		$("#boy-sprite").attr("src", "img/boy_sprite-deselected.png");
+		$("#boy-label").attr("src", "img/boy-deselected.png");
+	}
 }
 
 function selectGirl(){
@@ -110,23 +114,38 @@ $(document).ready(function(){
 	$('div').show();
 	$('body').css('display', 'none').fadeIn(500);
 	
-	$("#boy-sprite").mouseover(selectBoy);
-	$("#boy-label").mouseover(selectBoy);
-	$("#boy-sprite").mouseout(deselectBoy);
-	$("#boy-label").mouseout(deselectBoy);
-	$("#girl-sprite").mouseover(selectGirl);
-	$("#girl-label").mouseover(selectGirl);
-	$("#girl-sprite").mouseout(deselectGirl);
-	$("#girl-label").mouseout(deselectGirl);
-	$('#back-btn').mouseover(selectBack);
-	$('#back-btn').mouseout(deselectBack);
+	if(!isSpriteSelected){
+		$("#boy-sprite").mouseover(selectBoy);
+		$("#boy-label").mouseover(selectBoy);
+		$("#boy-sprite").mouseout(deselectBoy);
+		$("#boy-label").mouseout(deselectBoy);
+		$("#girl-sprite").mouseover(selectGirl);
+		$("#girl-label").mouseover(selectGirl);
+		$("#girl-sprite").mouseout(deselectGirl);
+		$("#girl-label").mouseout(deselectGirl);
+		$('#back-btn').mouseover(selectBack);
+		$('#back-btn').mouseout(deselectBack);
 
-	$('#back-btn').click(function(){
-		redirect("register.php");
-	});
-	$('body').keydown(function(key){
-		console.log(key.keyCode);
-	});	
+		$('#back-btn').click(function(){
+			redirect("register.php");
+		});
+		$('body').keydown(function(key){
+			console.log(key.keyCode);
+		});	
 
+		$("#boy-sprite").click(function(){
+			isSpriteSelected = true;
+			console.log(isSpriteSelected);
+			$("#girl-label").fadeOut(500);
+			$("#girl-sprite").fadeOut(500);
+			$("#boy-label").fadeOut(500, function(){
+				$("#blankspace").fadeIn(1, function(){
+					$("#boy-sprite").fadeIn(500);
+				});
+			});
+			$("#boy-sprite").fadeOut(500);
+			$("#back-btn").fadeOut(500);
+		});
+	}
 });
 </script>
