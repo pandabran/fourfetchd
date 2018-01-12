@@ -20,6 +20,9 @@ body{
 #girl-label{
 	margin-left: 10px;
 }
+#back-btn{
+	margin-top: 30px;
+}
 </style>
 <link rel="stylesheet" src="css/bootstrap.min.css">
 </head>
@@ -35,6 +38,9 @@ body{
 		<div class="row sprites">
 			<center><img id="boy-sprite" src="img/boy_sprite-deselected.png"><img id="girl-sprite" src="img/girl_sprite-deselected.png"></center>
 		</div>
+		<div class="row back">
+			<center><img id="back-btn" src="img/back-centered_deselected-small.png"></center>
+		</div>
 	</div>
 </div>
 </body>
@@ -46,24 +52,6 @@ var isLoginSelected = true; // true = login; false = register
 var song = document.createElement("audio");
 song.setAttribute("src", "audio/sfx/select.mp3");
 $.get();
-
-function selectLogin(){
-	$("#login-btn").attr("src", "img/login_selected.png");
-	$("#register-btn").attr("src", "img/register_deselected.png");
-	if(!isLoginSelected){
-		isLoginSelected = true;
-		playSound();
-	}	
-}
-
-function selectRegister(){
-	$("#register-btn").attr("src", "img/register_selected.png");
-	$("#login-btn").attr("src", "img/login_deselected.png");
-	if(isLoginSelected){
-		isLoginSelected = false;
-		playSound();
-	}		
-}
 
 function playSound(){
 	if(song.currentTime != 0){
@@ -79,7 +67,6 @@ function selectOption(link){
 		window.location = link;
 	});
 }
-
 
 function selectBoy(){
 	$("#boy-sprite").attr("src", "img/boy_sprite.png");
@@ -102,48 +89,44 @@ function deselectGirl(){
 	$("#girl-sprite").attr("src", "img/girl_sprite-deselected.png");
 	$("#girl-label").attr("src", "img/girl-deselected.png");
 }
+
+function selectBack(){
+	$("#back-btn").attr("src", "img/back-centered_selected-small.png");
+	playSound();
+}
+
+function deselectBack(){
+	$("#back-btn").attr("src", "img/back-centered_deselected-small.png");
+}
+
+function redirect(link){
+	playSound();
+	$('body').delay(100).fadeOut(500, function(){
+		window.location = link;
+	});
+}
+
 $(document).ready(function(){
 	$('div').show();
 	$('body').css('display', 'none').fadeIn(500);
 	
-	$("#boy-sprite").mouseover(function(){
-		selectBoy();
-	});
+	$("#boy-sprite").mouseover(selectBoy);
+	$("#boy-label").mouseover(selectBoy);
+	$("#boy-sprite").mouseout(deselectBoy);
+	$("#boy-label").mouseout(deselectBoy);
+	$("#girl-sprite").mouseover(selectGirl);
+	$("#girl-label").mouseover(selectGirl);
+	$("#girl-sprite").mouseout(deselectGirl);
+	$("#girl-label").mouseout(deselectGirl);
+	$('#back-btn').mouseover(selectBack);
+	$('#back-btn').mouseout(deselectBack);
 
-	$("#boy-sprite").mouseout(function(){
-		deselectBoy();
+	$('#back-btn').click(function(){
+		redirect("register.php");
 	});
-
-	$("#girl-sprite").mouseover(function(){
-		selectGirl();
-	});
-
-	$("#girl-sprite").mouseout(function(){
-		deselectGirl();
-	});
-
 	$('body').keydown(function(key){
 		console.log(key.keyCode);
-	});
+	});	
 
-// -----> add select and deselect triggers for the labels
-
-	// $("#register-btn").hover(selectRegister);
-	// $("#login-btn").hover(selectLogin);
-	// $("#login-btn").click(function(){
-	// 	selectOption("login.php");
-	// });
-	// $("#register-btn").click(function(){
-	// 	selectOption("register.php");
-	// });
-
-	// $('body').keydown(function(key){
-	// 	console.log(key.keyCode);
-	// 	if(key.keyCode == 38 || key.keyCode == 40){
-	// 		isLoginSelected ? selectRegister() : selectLogin();
-	// 	}else if(key.keyCode == 13){
-	// 		selectOption(isLoginSelected ? "login.php" : "register.php");
-	// 	}
-	// });
 });
 </script>
