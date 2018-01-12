@@ -63,28 +63,33 @@ body{
 <script src="js/jquery-3.1.1.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script>
-var song = document.createElement("audio");
+var isRedirecting = false;
+var select = document.createElement("audio");
 var key = document.createElement("audio");
 key.setAttribute("src", "audio/sfx/key.mp3");
-song.setAttribute("src", "audio/sfx/select.mp3");
+select.setAttribute("src", "audio/sfx/select.mp3");
 $.get();
 
 function selectLogin(){
-	$("#login-btn").attr("src", "img/login_selected-small.png");
-	playSound();
+	if(!isRedirecting){
+		$("#login-btn").attr("src", "img/login_selected-small.png");
+		playSound();
+	}
 }
 
 function selectBack(){
-	$("#back-btn").attr("src", "img/back_selected-small.png");
-	playSound();
+	if(!isRedirecting){
+		$("#back-btn").attr("src", "img/back_selected-small.png");
+		playSound();
+	}	
 }
 
 function playSound(){
-	if(song.currentTime != 0){
-		song.pause();
-		song.currentTime = 0;
+	if(select.currentTime != 0){
+		select.pause();
+		select.currentTime = 0;
 	}		
-	song.play();
+	select.play();
 }
 
 function selectOption(link){
