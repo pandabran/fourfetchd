@@ -93,6 +93,7 @@ function playSound(){
 }
 
 function selectOption(link){
+	isRedirecting = true;
 	playSound();
 	$('body').delay(100).fadeOut(500, function(){
 		window.location = link;
@@ -139,29 +140,30 @@ function type(){
 $(document).ready(function(){
 	$('div').show();
 	$('body').css('display', 'none').fadeIn(500);
+	if(!isRedirecting){
+		$("#login-btn").mouseover(selectLogin);
+		$("#login-btn").mouseout(function(){
+			$("#login-btn").attr("src", "img/login_deselected-small.png");
+		});
+		$("#login-btn").click(function(){
+			selectOption("index.php");
+		});
 
-	$("#login-btn").mouseover(selectLogin);
-	$("#login-btn").mouseout(function(){
-		$("#login-btn").attr("src", "img/login_deselected-small.png");
-	});
-	$("#login-btn").click(function(){
-		selectOption("index.php");
-	});
+		$("#back-btn").mouseover(selectBack);
+		$("#back-btn").mouseout(function(){
+			$("#back-btn").attr("src", "img/back_deselected-small.png");
+		});
+		$("#back-btn").click(function(){
+			selectOption("select.php");
+		});
 
-	$("#back-btn").mouseover(selectBack);
-	$("#back-btn").mouseout(function(){
-		$("#back-btn").attr("src", "img/back_deselected-small.png");
-	});
-	$("#back-btn").click(function(){
-		selectOption("select.php");
-	});
+		$("#username-field").keydown(function(key){
+			typeConditions($("#username-field").val(), key);
+		});
 
-	$("#username-field").keydown(function(key){
-		typeConditions($("#username-field").val(), key);
-	});
-
-	$("#password-field").keydown(function(key){
-		typeConditions($("#password-field").val(), key);
-	});
+		$("#password-field").keydown(function(key){
+			typeConditions($("#password-field").val(), key);
+		});
+	}
 });
 </script>

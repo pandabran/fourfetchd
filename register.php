@@ -66,46 +66,51 @@ body{
 <script src="js/jquery-3.1.1.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script>
-var song = document.createElement("audio");
+var isRedirecting = false;
+var select = document.createElement("audio");
 var key = document.createElement("audio");
 key.setAttribute("src", "audio/sfx/key.mp3");
-song.setAttribute("src", "audio/sfx/select.mp3");
+select.setAttribute("src", "audio/sfx/select.mp3");
 $.get();
 
 function selectNext(){
-	$("#next-btn").attr("src", "img/next_selected.png");
-	playSound();
+	if(!isRedirecting){
+		$("#next-btn").attr("src", "img/next_selected.png");
+		playSound();
+	}	
 }
 
 function selectBack(){
-	$("#back-btn").attr("src", "img/back_selected-small.png");
-	playSound();
+	if(!isRedirecting){
+		$("#back-btn").attr("src", "img/back_selected-small.png");
+		playSound();
+	}
 }
 
 function playSound(){
-	if(song.currentTime != 0){
-		song.pause();
-		song.currentTime = 0;
+	if(select.currentTime != 0){
+		select.pause();
+		select.currentTime = 0;
 	}		
-	song.play();
+	select.play();
 }
 
 function selectOption(link){
+	isRedirecting = true;
 	playSound();
 	$('body').delay(100).fadeOut(500, function(){
 		window.location = link;
 	});
 }
 
-function typeConditions(word){
-	if(word.length < 18 && word.length >= 0){
+function typeConditions(word, key){
+	if(word.length == 18 && key.keyCode == 8){
 		type();
-	}else if(key.keyCode == 8 && word.length == 18){
-		type();
+	}else if(word.length >= 0){
+		if((word.length == 0 && (isValidCharacter(key.keyCode) || isAlNum(key.keyCode))) || (word.length < 18 && word.length > 0)){
+			type();
+		}
 	}
-
-	//NOTE:
-	// - make condition for if input is empty and user inputs a character that is allowed in usernames/passwords
 }
 
 function type(){
@@ -119,33 +124,34 @@ function type(){
 $(document).ready(function(){
 	$('div').show();
 	$('body').css('display', 'none').fadeIn(500);
+	if(!isRedirecting){
+		$("#next-btn").mouseover(selectNext);
+		$("#next-btn").mouseout(function(){
+			$("#next-btn").attr("src", "img/next_deselected.png");
+		});
+		$("#next-btn").click(function(){
+			selectOption("boyOrGirl.php");
+		});
 
-	$("#next-btn").mouseover(selectNext);
-	$("#next-btn").mouseout(function(){
-		$("#next-btn").attr("src", "img/next_deselected.png");
-	});
-	$("#next-btn").click(function(){
-		selectOption("boyOrGirl.php");
-	});
+		$("#back-btn").mouseover(selectBack);
+		$("#back-btn").mouseout(function(){
+			$("#back-btn").attr("src", "img/back_deselected-small.png");
+		});
+		$("#back-btn").click(function(){
+			selectOption("select.php");
+		});
 
-	$("#back-btn").mouseover(selectBack);
-	$("#back-btn").mouseout(function(){
-		$("#back-btn").attr("src", "img/back_deselected-small.png");
-	});
-	$("#back-btn").click(function(){
-		selectOption("select.php");
-	});
+		$("#username-field").keydown(function(key){
+			typeConditions($("#username-field").val(), key);
+		});
 
-	$("#username-field").keydown(function(key){
-		typeConditions($("#username-field").val());
-	});
+		$("#password-field").keydown(function(key){
+			typeConditions($("#password-field").val(), key);
+		});
 
-	$("#password-field").keydown(function(key){
-		typeConditions($("#password-field").val());
-	});
-
-	$("#confirm-field").keydown(function(key){
-		typeConditions($("#confirm-field").val());
-	});
+		$("#confirm-field").keydown(function(key){
+			typeConditions($("#confirm-field").val(), key);
+		});
+	}
 });
 </script>
