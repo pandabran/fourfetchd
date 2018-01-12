@@ -21,21 +21,21 @@ body{
 <script src="js/jquery-3.1.1.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script>
-var song = document.createElement("audio");
+var bgm = document.createElement("audio");
 var cry = document.createElement("audio");
-song.setAttribute("src", "audio/bgm/startup.mp3");
+bgm.setAttribute("src", "audio/bgm/startup.mp3");
 cry.setAttribute("src", "audio/sfx/charizard.mp3");
 $.get();
 
 function select(){
 	cry.play();
 	cry.onplay = function(){
-		song.volume = 0.4;
+		bgm.volume = 0.4;
 	};
 	cry.onended = function(){
-		song.volume = 1.0;
+		bgm.volume = 1.0;
 		$('body').fadeOut(500, function(){
-			song.pause();
+			bgm.pause();
 			redirect("select.php");
 		});
 	};
@@ -50,8 +50,8 @@ $(document).ready(function(){
 	$('div').show();
 	$('body').css('display', 'none').fadeIn(3000);
 
-	song.play();
-	song.onended = function(){
+	bgm.play();
+	bgm.onended = function(){
 		setTimeout(redirect("index.php"), 2500);
 	}
 

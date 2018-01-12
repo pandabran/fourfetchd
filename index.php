@@ -21,8 +21,8 @@ body{
 <script src="js/jquery-3.1.1.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script>
-var song = document.createElement("audio");
-song.setAttribute("src", "audio/bgm/intro.mp3");
+var bgm = document.createElement("audio");
+bgm.setAttribute("src", "audio/bgm/intro.mp3");
 $.get();
 
 function redirect(){
@@ -33,8 +33,8 @@ $(document).ready(function(){
 	$('div').show();
 	$('body').css('display', 'none').fadeIn(3000);
 
-	song.play();
-	song.onended = function(){
+	bgm.play();
+	bgm.onended = function(){
 		redirect();
 	}
 

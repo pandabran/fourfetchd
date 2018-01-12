@@ -31,38 +31,48 @@ body{
 <script src="js/bootstrap.min.js"></script>
 <script>
 var isLoginSelected = true; // true = login; false = register
-var song = document.createElement("audio");
-song.setAttribute("src", "audio/sfx/select.mp3");
+var isRedirecting = false;
+var isSelectPlaying = false;
+var select = document.createElement("audio");
+select.setAttribute("src", "audio/sfx/select.mp3");
 $.get();
 
 function selectLogin(){
-	$("#login-btn").attr("src", "img/login_selected.png");
-	$("#register-btn").attr("src", "img/register_deselected.png");
-	if(!isLoginSelected){
-		isLoginSelected = true;
-		playSound();
+	if(!isRedirecting){
+		$("#login-btn").attr("src", "img/login_selected.png");
+		$("#register-btn").attr("src", "img/register_deselected.png");
+		if(!isLoginSelected && !isSelectPlaying){
+			isLoginSelected = true;
+			playSound();
+		}
 	}	
 }
 
 function selectRegister(){
-	$("#register-btn").attr("src", "img/register_selected.png");
-	$("#login-btn").attr("src", "img/login_deselected.png");
-	if(isLoginSelected){
-		isLoginSelected = false;
-		playSound();
-	}		
+	if(!isRedirecting){
+		$("#register-btn").attr("src", "img/register_selected.png");
+		$("#login-btn").attr("src", "img/login_deselected.png");
+		if(isLoginSelected && !isSelectPlaying){
+			isLoginSelected = false;
+			playSound();
+		}
+	}	
 }
 
 function playSound(){
-	if(song.currentTime != 0){
-		song.pause();
-		song.currentTime = 0;
-	}		
-	song.play();
+	if(select.currentTime != 0){
+		select.pause();
+		select.currentTime = 0;
+	}
+	select.play();
 }
 
 function selectOption(link){
-	playSound();
+	if(!isSelectPlaying){
+		isRedirecting = true;
+		playSound();
+		isSelectPlaying = true;
+	}
 	$('body').delay(100).fadeOut(500, function(){
 		window.location = link;
 	});
@@ -72,22 +82,23 @@ $(document).ready(function(){
 	$('div').show();
 	$('body').css('display', 'none').fadeIn(500);
 	
-	$("#register-btn").hover(selectRegister);
-	$("#login-btn").hover(selectLogin);
-	$("#login-btn").click(function(){
-		selectOption("login.php");
-	});
-	$("#register-btn").click(function(){
-		selectOption("register.php");
-	});
-
-	$('body').keydown(function(key){
-		console.log(key.keyCode);
-		if(key.keyCode == 38 || key.keyCode == 40){
-			isLoginSelected ? selectRegister() : selectLogin();
-		}else if(key.keyCode == 13){
-			selectOption(isLoginSelected ? "login.php" : "register.php");
-		}
-	});
+	if(!isRedirecting){
+		$("#register-btn").hover(selectRegister);
+		$("#login-btn").hover(selectLogin);
+		$("#login-btn").click(function(){
+			selectOption("login.php");
+		});
+		$("#register-btn").click(function(){
+			selectOption("register.php");
+		});
+		$('body').keydown(function(key){
+			console.log(key.keyCode);
+			if(key.keyCode == 38 || key.keyCode == 40){
+				isLoginSelected ? selectRegister() : selectLogin();
+			}else if(key.keyCode == 13){
+				selectOption(isLoginSelected ? "login.php" : "register.php");
+			}
+		});
+	}
 });
 </script>

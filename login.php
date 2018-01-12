@@ -114,13 +114,12 @@ function isAlNum(value){
 }
 
 function typeConditions(word, key){
-	if(word.length >= 0){
+	if(word.length == 18 && key.keyCode == 8){
+		type();
+	}else if(word.length >= 0){
 		if((word.length == 0 && (isValidCharacter(key.keyCode) || isAlNum(key.keyCode))) || (word.length < 18 && word.length > 0)){
 			type();
 		}
-	}else if(key.keyCode == 8 && word.length == 18){
-		type();
-		console.log("condition2");
 	}
 }
 
