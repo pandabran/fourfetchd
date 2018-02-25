@@ -5,6 +5,9 @@
 body{
 	background-color: #4a518c; 
 }
+input{
+	text-indent: 3%;
+}
 .field{
 	height: 154px;
 }
@@ -146,7 +149,7 @@ $(document).ready(function(){
 			$("#login-btn").attr("src", "img/login_deselected-small.png");
 		});
 		$("#login-btn").click(function(){
-			selectOption("index.php");
+			selectOption("home.php");
 		});
 
 		$("#back-btn").mouseover(selectBack);
