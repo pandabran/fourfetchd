@@ -6,26 +6,39 @@ body{
 	background-color: #4a518c; 
 }
 h1{
-	top: -5%;
+	top: -2%;
 	left: 33%;
 	position: absolute;
 	color: #aefcf5;
-	font-size: 800%;
+	font-size: 8em;
 	text-shadow: 2px 2px 5px black;
 	font-family: Pokémon Emerald Pro Regular;
 }
 #animation{
-	margin-top: 1%;
+	margin-top: 3%;
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
-	margin-bottom: 1%;
-	height: 80%;
-	border-radius: 5%;
-	border: 3px solid #567d85;
+	margin-bottom: 1.5%;
+	height: 35em;
+	border-radius: 5%;	
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.profile{
+	margin-top: -42%;
+	margin-left: 91%;
+	width: 5em;
+	height: 5em;
+	border-radius: 50%;
+	border: 3px solid grey;
+	position: absolute;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.profile:hover{
+	box-shadow: none;
 }
 #play-btn, #quit-btn{
-	margin-left: 10px;
+	margin-left: 1%;
 }
 </style>
 <link rel="stylesheet" src="css/bootstrap.min.css">
@@ -34,9 +47,10 @@ h1{
 <div class="container">
 	<h1>FOURFETCH'D</h1>
 	<img id="animation" src="img/pokemon_bg_1.gif">
+	<input type="image" id="profile-btn" class="profile" src="img/profile_girl.png">
 	<div class="row fields">
 		<div class="row buttons">
-			<center><img id="instruction-btn" src="img/instructions_deselected.png"><img id="play-btn" src="img/play_deselected.png"><img id="quit-btn" src="img/quit_deselected.png"></center>
+			<center><img id="instruction-btn" src="img/instruction_deselected.png"><img id="play-btn" src="img/plays_deselected.png"><img id="quit-btn" src="img/quits_deselected.png"></center>
 		</div>
 	</div>
 </div>
@@ -54,21 +68,27 @@ $.get();
 
 function selectInstruction(){
 	if(!isRedirecting){
-		$("#instruction-btn").attr("src", "img/instructions_selected.png");
+		$("#instruction-btn").attr("src", "img/instruction_selected.png");
 		playSound();
 	}
 }
 
 function selectPlay(){
 	if(!isRedirecting){
-		$("#play-btn").attr("src", "img/play_selected.png");
+		$("#play-btn").attr("src", "img/plays_selected.png");
 		playSound();
 	}	
 }
 
 function selectQuit(){
 	if(!isRedirecting){
-		$("#quit-btn").attr("src", "img/quit_selected.png");
+		$("#quit-btn").attr("src", "img/quits_selected.png");
+		playSound();
+	}	
+}
+
+function selectProfile(){
+	if(!isRedirecting){
 		playSound();
 	}	
 }
@@ -94,7 +114,7 @@ $(document).ready(function(){
 	if(!isRedirecting){
 		$("#instruction-btn").mouseover(selectInstruction);
 		$("#instruction-btn").mouseout(function(){
-			$("#instruction-btn").attr("src", "img/instructions_deselected.png");
+			$("#instruction-btn").attr("src", "img/instruction_deselected.png");
 		});
 		$("#instruction-btn").click(function(){
 			selectOption("#");
@@ -102,7 +122,7 @@ $(document).ready(function(){
 
 		$("#play-btn").mouseover(selectPlay);
 		$("#play-btn").mouseout(function(){
-			$("#play-btn").attr("src", "img/play_deselected.png");
+			$("#play-btn").attr("src", "img/plays_deselected.png");
 		});
 		$("#play-btn").click(function(){
 			selectOption("#");
@@ -110,10 +130,15 @@ $(document).ready(function(){
 
 		$("#quit-btn").mouseover(selectQuit);
 		$("#quit-btn").mouseout(function(){
-			$("#quit-btn").attr("src", "img/quit_deselected.png");
+			$("#quit-btn").attr("src", "img/quits_deselected.png");
 		});
 		$("#quit-btn").click(function(){
-			selectOption("#");
+			selectOption("index.php");
+		});
+
+		$("#profile-btn").mouseover(selectProfile);
+		$("#profile-btn").click(function(){
+			selectOption("index.php");
 		});
 	}
 });
